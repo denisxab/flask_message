@@ -29,7 +29,7 @@ class BaseUser(BaseUserSchema):
         return cls._verification_sql_id(res)
 
     @classmethod
-    def enter_account(cls, user_name: int, password: str) -> int:
+    def enter_account(cls, user_name: str, password: str) -> int:
         """
         Вход пользователя в свой аккаунт
 
@@ -39,7 +39,7 @@ class BaseUser(BaseUserSchema):
         SELECT id
         FROM base_user
         WHERE id = %s and hash_password =  %s;
-        """, [user_name, hashPassword(password)])
+        """, [cls._get_id_from_user_name(user_name), hashPassword(password)])
         return cls._verification_sql_id(user_id)
 
     @classmethod
@@ -73,6 +73,18 @@ class BaseUser(BaseUserSchema):
             logger.error(f"Ошибка удаления аккаунта {user_id=}", e)
             raise e
 
+    @classmethod
+    def check_password(cls, user_id: int, hash_password: str):
+        """
+        Проверить действительность хеша пароль пользователя
+        """
+        user_id = rsql("""
+                SELECT id
+                FROM base_user
+                WHERE id = %s and hash_password =  %s;
+                """, [user_id, hash_password])
+        return cls._verification_sql_id(user_id)
+
 
 class LowUser(BaseUser):
 
@@ -98,7 +110,7 @@ class Message(MessageSchema):
         """
         Получить список ИСХОДЯЩИХ сообщений от пользователя
         """
-        return helpful.Rsql("""
+        return rsql("""
         SELECT send_tabel.id, Отправитель, user_name as Получатель, message_id, text_message
         FROM (SELECT base_user.id, user_name as "Отправитель", get_user_id, message.id as message_id, text_message
               FROM base_user
@@ -112,8 +124,8 @@ class Message(MessageSchema):
         """
         Получить список ВХОДЯЩИХ сообщений к пользователю
         """
-        return helpful.Rsql("""
-        SELECT send_tabel.id, Отправитель, user_name as Получатель, message_id, text_message
+        return rsql("""
+        SELECT send_tabel.id, user_name as Получатель, Отправитель, message_id, text_message
         FROM (SELECT base_user.id,
                      user_name  as "Отправитель",
                      send_user_id,
