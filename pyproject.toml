@@ -1,0 +1,18 @@
+[tool.poetry]
+name = "vashlist_test"
+version = "0.1.0"
+description = ""
+authors = ["Ваше Имя <you@example.com>"]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+mysql-connector-python = "^8.0.27"
+pytest = "^6.2.5"
+loguru = "^0.5.3"
+
+[tool.poetry.dev-dependencies]
+bpython = "^0.22.1"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"

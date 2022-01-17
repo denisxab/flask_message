@@ -1,0 +1,5 @@
+/venv
+/.idea
+poetry.lock
+/models/test/.pytest_cache
+__pycache__/

@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Вход в аукнут</title>
+</head>
+<body>
+
+<form method="post" name="EnterUserAccount"
+      action="{{ url_for('enter_user') }}"
+      accept-charset="UTF-8"
+      autocomplete="on"
+      target="_self"
+      enctype="application/x-www-form-urlencoded">
+    <label>
+        Имя пользователя <br>
+        <input type="text" name="UserName"> <br>
+    </label>
+    <label>
+        Пароль <br>
+        <input type="password" name="Password">
+    </label> <br>
+    <input type="submit" value="Отправить">
+
+    <br>
+    <a href="{{ url_for('register_account') }}">
+        Регистрация нового пользователя </a>
+</form>
+
+</body>
+</html>
